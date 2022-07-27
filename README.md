@@ -1,8 +1,8 @@
 # Homework 09 - PHP and MySQL Databases
 
-## Last Name, First Name
+## Stringham, Don
 
-`Github Username`
+`dbs67`
 
 ### Initial Setup
 
