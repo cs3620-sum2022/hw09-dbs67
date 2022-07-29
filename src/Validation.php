@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Validation.php
  *
@@ -10,6 +11,7 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://weber.edu
  */
+
 namespace App;
 
 $host = 'mysql-db';
@@ -18,6 +20,8 @@ $user = 'cs3620';
 $pass = 'letmein';
 
 // TODO write code that validates the  data variables passed in on http://localhost/Validation.php?col_string=Two&col_number=2
+// col_string = "Two OR 1=1--" change to look like this: col_string = "Two"
+// col_number = "2" change to be be col_number = 2
 
 // $_GET is a PHP super-global read more about super-globals here:
 // https://secure.php.net/manual/en/language.variables.superglobals.php
