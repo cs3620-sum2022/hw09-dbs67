@@ -14,7 +14,7 @@
 
 namespace App;
 
-$host = 'mysql-db';
+$host = 'localhost';
 $dbname = 'cs3620';
 $user = 'cs3620';
 $pass = 'letmein';
