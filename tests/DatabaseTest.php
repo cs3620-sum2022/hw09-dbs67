@@ -25,7 +25,6 @@ use PHPUnit\Framework\TestCase;
  * @property string _port
  * @property string _username
  * @property string _password
- * @property \MySQLi _connection
  * @property string _database
  * @category UnitTests
  * @package  App\Tests

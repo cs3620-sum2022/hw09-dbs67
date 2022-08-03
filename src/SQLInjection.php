@@ -20,36 +20,37 @@ $host = 'localhost';
 $dbname = 'cs3620';
 $user = 'cs3620';
 $pass = 'letmein';
-$charset = 'utf8';
+$charset = 'utf8mb4';
 $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+$pdo = null;
 
 print("Homework 09 - SQL Injection</br>");
 var_dump($_GET);
 print("</br>");
 
 // URL with SQL injection: http://localhost/SQLInjection.php?col_string=%27Two%27+OR+1=1--&col_number=2
-
-// TODO change this below code to prevent SQL Injection
-$conn = mysqli_connect($host, $user, $pass, $dbname);
-
-$query = "SELECT * FROM test WHERE col_string = {$_GET['col_string']} AND col_number = {$_GET['col_number']}";
-
-$result = mysqli_query($conn, $query);
-
-if (is_bool($result)) {
-    throw new \RuntimeException('ERROR: result is a boolean and NOT a result set');
+try {
+    $pdo = new \PDO($dsn, $user, $pass);
+} catch (\PDOException $e) {
+    throw new \PDOException($e->getMessage(), $e->getCode());
 }
 
-$num_row = mysqli_num_rows($result);
+// $query = "SELECT * FROM test WHERE col_string = {$_GET['col_string']} AND col_number = {$_GET['col_number']}";
+$query1 = "SELECT * FROM test WHERE col_string = :colString AND col_number = :colNumber";
 
-print('Retrieved ' . $num_row . ' row(s)</br></br>');
+// $stmt = $pdo->query($query);
+$stmt = $pdo->prepare($query1);
+$stmt->execute([
+    'colString' => $_GET['col_string'],
+    'colNumber' => $_GET['col_number'],
+]);
 
-while ($row = mysqli_fetch_row($result)) {
+print('Retrieved ' . $stmt->rowCount() . ' row(s)</br></br>');
+
+while ($row = $stmt->fetch()) {
     printf('<li>%s, %s, %s, %s, %s</li></br>', $row[0], $row[1], $row[2], $row[3], $row[4]);
 }
 
-mysqli_free_result($result);
-
-mysqli_close($conn);
+$stmt->closeCursor();
 
 echo "All done...";
