@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Unit-test for the database.
  *
@@ -10,8 +11,9 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://weber.edu
  */
-declare(strict_types = 1)
-;
+
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -45,18 +47,24 @@ class DatabaseTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->_host = 'mysql-db';
+        $this->_driver = "mysql";
+        $this->_host = 'localhost';
         $this->_port = '3306';
         $this->_username = 'cs3620';
         $this->_password = 'letmein';
-        $this->_connection = null;
         $this->_database = 'cs3620';
-        $this->_connection = mysqli_connect(
-            $this->_host,
-            $this->_username,
-            $this->_password
-        );
-        $this->_connection->select_db($this->_database);
+        $this->_charset = 'utf8mb4';
+        $dsn = $this->_driver . ":host=" . $this->_host . ";port=" . $this->_port . ";dbname=" . $this->_database . ";charset=" . $this->_charset;
+        $options = [
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+            \PDO::ATTR_EMULATE_PREPARES => false,
+        ];
+        try {
+            $this->_pdo = new \PDO($dsn, $this->_username, $this->_password, $options);
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), $e->getCode());
+        }
     }
 
     /**
@@ -89,11 +97,10 @@ class DatabaseTest extends TestCase
     {
         // arrange
         $query = "SELECT * FROM " . $this->_database . ".test";
-        print($query);
+        $stmt = $this->_pdo->query($query);
         // act
-        $result = $this->_connection->query($query);
-        $row = $result->fetch_row();
+        $rows = $stmt->rowCount();
         // assert
-        $this->assertEquals('1', $row[0]);
+        $this->assertEquals(3, $rows);
     }
 }
