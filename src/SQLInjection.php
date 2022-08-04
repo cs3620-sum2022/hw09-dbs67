@@ -35,10 +35,8 @@ try {
     throw new \PDOException($e->getMessage(), $e->getCode());
 }
 
-// $query = "SELECT * FROM test WHERE col_string = {$_GET['col_string']} AND col_number = {$_GET['col_number']}";
 $query1 = "SELECT * FROM test WHERE col_string = :colString AND col_number = :colNumber";
 
-// $stmt = $pdo->query($query);
 $stmt = $pdo->prepare($query1);
 $stmt->execute([
     'colString' => $_GET['col_string'],
